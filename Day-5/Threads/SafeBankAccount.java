@@ -1,12 +1,13 @@
 package Threads;
 
-public class BankAccount {
+public class SafeBankAccount    
+ {
      int balance = 1000;
-        void withdraw(int amount) {
+    synchronized void withdraw(int amount) {
         balance -= amount;
     }
     public static void main(String[] args) throws InterruptedException {
-        BankAccount acc = new BankAccount();
+        SafeBankAccount acc = new SafeBankAccount();
         Thread t1 = new Thread(() -> acc.withdraw(500));
         Thread t2 = new Thread(() -> acc.withdraw(500));
         t1.start();
@@ -18,13 +19,14 @@ public class BankAccount {
 }
 
 /*
-Both the threads t1 & t2 access modify the same balance variable
-simulatneously. Due to lack of synchronization . the final balance becomes 
-inconsistent
+Code Explaination
+The Synchronized keyword ensures that only one thread
+can execute withdraw() opration at a time, preventing RACE CONDITION
+and ensuring correct balance deduction.
 
-ℹ️ Points to remember:
-💫 Shared data causes issues
-💫 Execution order is unpredictable
-💫 Leads to data consistency
-💫 Need synchronixation to solve the RACE CONDITION
+ℹ️ Points to remember
+💫 Synchronisation avoids RACE CONDITION
+💫 Locks critical section in an application
+💫 Slower but safe
+💫 Essential for shared resources
 */
